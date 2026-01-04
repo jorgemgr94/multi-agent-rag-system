@@ -1,0 +1,46 @@
+# Multi-Agent RAG System
+
+This is a Python FastAPI project building a multi-agent AI system with RAG, vector databases, and semantic memory.
+
+## Tech Stack
+- Python 3.11+, FastAPI, Pydantic
+- LangChain + LangChain-OpenAI
+- Vector databases: FAISS (local), Pinecone (managed)
+- Package management: uv
+
+## Architecture
+
+### Multi-Agent System
+- **PlannerAgent**: Decomposes tasks, defines strategy
+- **RetrieverAgent**: Fetches relevant knowledge via RAG
+- **ExecutorAgent**: Executes automation actions
+- **ValidatorAgent**: Validates outputs and detects failures
+
+### Agent Flow
+1. Receive task
+2. Planner decomposes into subtasks
+3. Retriever fetches relevant context
+4. Executor performs actions
+5. Validator checks results
+6. Produce final response
+
+### Design Principles
+- Agents have explicit and limited responsibilities
+- Retrieval is intentional, not automatic
+- Memory is selective and scoped
+- No infinite loops (max iterations enforced)
+- Decisions are structured (JSON)
+- Costs and latency are tracked
+
+## Agent Rules
+- Never hallucinate tool or retrieval results
+- If insufficient information, request clarification or escalate
+- Tool calls must use structured schemas
+- Reasoning is logged but not exposed to end users
+- Vector search results must be traceable to sources
+
+## Git
+- Use conventional commits: `type(scope): description`
+- Types: feat, fix, docs, style, refactor, test, chore
+- Keep subject line under 50 characters
+- Use imperative mood ("add" not "added")
