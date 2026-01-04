@@ -6,57 +6,73 @@ A **production-oriented multi-agent AI system** designed for knowledge-driven au
 
 This system implements:
 
-- 🤖 **Multi-agent orchestration** — Specialized agents with clear responsibilities
+- 🤖 **Multi-agent orchestration** — Specialist agents with clear responsibilities
 - 🔍 **Retrieval-Augmented Generation (RAG)** — Context-aware responses from knowledge bases
-- 🧠 **Vector databases & semantic memory** — FAISS (local) and Pinecone (managed)
-- ⚡ **Automation pipelines** — Integration with external APIs
+- 🧠 **Vector databases & semantic memory** — FAISS (local) with hybrid search
 - 📊 **Observability & cost control** — Token tracking, latency metrics
 
 ## Architecture
 
 ```mermaid
-flowchart TD
-    subgraph Client
-        A[POST /tasks]
+flowchart TB
+    subgraph Input
+        USER[Sales Rep]
+        QUERY[Deal Context]
     end
 
-    subgraph Orchestrator
-        B[Task Input] --> C[PlannerAgent]
-        C -->|decompose| D[RetrieverAgent]
-        D -->|fetch context| E[ExecutorAgent]
-        E -->|execute actions| F[ValidatorAgent]
-        F -->|validate| G{Success?}
-        G -->|yes| H[Final Response]
-        G -->|no| C
+    subgraph Orchestration
+        ORCH[Orchestrator Agent]
     end
 
-    subgraph Knowledge["Knowledge Layer"]
-        D --> I[(Vector Store)]
-        I --> D
+    subgraph Specialists[Specialist Agents]
+        RESEARCH[Company Researcher]
+        SIMILAR[Similar Deals Finder]
+        COMPETE[Competitor Analyst]
+        PROPOSE[Proposal Drafter]
     end
 
-    subgraph Memory["Memory Layer"]
-        J[(Long-term Memory)]
-        K[(Episodic Memory)]
+    subgraph Knowledge[Vector Database]
+        DOCS[(Indexed Documents)]
     end
 
-    A --> B
-    H --> L[Response]
+    subgraph Output
+        BRIEF[Deal Briefing]
+    end
 
-    style I fill:#f9f,stroke:#333
-    style J fill:#90EE90,stroke:#2d5a2d,color:#1a1a1a
-    style K fill:#90EE90,stroke:#2d5a2d,color:#1a1a1a
-    style Memory fill:#e8f5e9,stroke:#4a7c59
+    USER --> QUERY
+    QUERY --> ORCH
+    ORCH --> RESEARCH
+    ORCH --> SIMILAR
+    ORCH --> COMPETE
+    ORCH --> PROPOSE
+    
+    RESEARCH <--> DOCS
+    SIMILAR <--> DOCS
+    COMPETE <--> DOCS
+    PROPOSE <--> DOCS
+    
+    RESEARCH --> ORCH
+    SIMILAR --> ORCH
+    COMPETE --> ORCH
+    PROPOSE --> ORCH
+    
+    ORCH --> BRIEF
+    BRIEF --> USER
+
+    style DOCS fill:#f9f,stroke:#333
+    style ORCH fill:#90EE90,stroke:#2d5a2d,color:#1a1a1a
+    style Specialists fill:#e8f5e9,stroke:#4a7c59
 ```
 
 ### Agents
 
 | Agent | Responsibility |
 |-------|----------------|
-| **PlannerAgent** | Decomposes tasks, defines execution strategy |
-| **RetrieverAgent** | Fetches relevant knowledge via semantic search |
-| **ExecutorAgent** | Executes automation actions and API calls |
-| **ValidatorAgent** | Validates outputs, detects failures |
+| **Orchestrator** | Coordinates workflow, synthesizes final briefing |
+| **Company Researcher** | Finds industry insights, market context |
+| **Similar Deals Finder** | Identifies past deals with similar characteristics |
+| **Competitor Analyst** | Retrieves competitive positioning |
+| **Proposal Drafter** | Generates customized talking points |
 
 ## Quick Start
 
@@ -93,14 +109,22 @@ make dev
 |----------|--------|-------------|
 | `/health` | GET | Liveness check |
 | `/status` | GET | Agent configuration and status |
-| `/tasks` | POST | Process a task through the multi-agent system |
+| `/briefings` | POST | Generate a deal briefing |
+| `/search` | POST | Direct semantic search |
+| `/documents` | GET | List indexed documents |
+| `/documents/ingest` | POST | Add documents to index |
 
 ### Example Request
 
 ```bash
-curl -X POST http://localhost:8000/tasks \
+curl -X POST http://localhost:8000/briefings \
   -H "Content-Type: application/json" \
-  -d '{"task": "Find relevant documentation about our refund policy and draft a response"}'
+  -d '{
+    "company_name": "Acme Corp",
+    "industry": "healthcare",
+    "company_size": "mid-market",
+    "meeting_type": "initial_call"
+  }'
 ```
 
 ## Development
@@ -111,8 +135,6 @@ curl -X POST http://localhost:8000/tasks \
 make dev          # Start dev server with hot reload
 make test         # Run tests
 make install-dev  # Install with dev dependencies
-make docker-build # Build Docker image
-make docker-up    # Run with docker-compose
 make clean        # Clean cache files
 ```
 
