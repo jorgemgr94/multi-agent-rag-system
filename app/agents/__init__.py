@@ -2,9 +2,11 @@
 
 This module provides:
 - BaseAgent: Abstract base class for all agents
-- (Future) PlannerAgent, RetrieverAgent, ExecutorAgent, ValidatorAgent
+- RetrieverAgent: RAG-based knowledge retrieval
+- (Future) PlannerAgent, ExecutorAgent, ValidatorAgent
 """
 
 from app.agents.base import BaseAgent
+from app.agents.retriever import RetrieverAgent
 
-__all__ = ["BaseAgent"]
+__all__ = ["BaseAgent", "RetrieverAgent"]

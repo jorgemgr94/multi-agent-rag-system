@@ -11,6 +11,10 @@ from app.schemas.document import (
     SearchResponse,
     SearchResult,
 )
+from app.schemas.retrieval import (
+    RetrievalObservation,
+    RetrievalResult,
+)
 from app.schemas.task import (
     AgentDecision,
     AgentResponse,
@@ -34,6 +38,9 @@ __all__ = [
     "SearchQuery",
     "SearchResponse",
     "SearchResult",
+    # Retrieval schemas
+    "RetrievalObservation",
+    "RetrievalResult",
     # Task schemas
     "AgentDecision",
     "AgentResponse",
