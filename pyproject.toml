@@ -11,6 +11,10 @@ dependencies = [
   "pydantic-settings",
   "langchain",
   "langchain-openai",
+  "langchain-community",
+  "faiss-cpu",
+  "tiktoken",
+  "pinecone",
 ]
 
 [project.optional-dependencies]
