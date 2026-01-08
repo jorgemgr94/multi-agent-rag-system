@@ -4,8 +4,8 @@ import re
 
 import tiktoken
 
-from app.logging_config import get_logger
-from app.schemas.document import Chunk, DocType, Document
+from app.core import get_logger
+from app.documents.schemas import Chunk, DocType, Document
 
 logger = get_logger(__name__)
 
@@ -18,6 +18,7 @@ CHUNK_CONFIG = {
     DocType.PRODUCT: {"chunk_size": 500, "overlap": 100},
     DocType.CASE_STUDY: {"chunk_size": 800, "overlap": 150},
     DocType.INDUSTRY: {"chunk_size": 600, "overlap": 120},
+    DocType.RECORDING: {"chunk_size": 800, "overlap": 150},
 }
 
 DEFAULT_CHUNK_CONFIG = {"chunk_size": 500, "overlap": 100}

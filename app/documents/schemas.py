@@ -1,10 +1,14 @@
-"""Document and chunk schemas for the vector database."""
+"""Document and retrieval schemas."""
 
 import datetime
 from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+# =============================================================================
+# Document Type Enums
+# =============================================================================
 
 
 class DocType(str, Enum):
@@ -16,6 +20,7 @@ class DocType(str, Enum):
     PRODUCT = "product"
     CASE_STUDY = "case_study"
     INDUSTRY = "industry"
+    RECORDING = "recording"  # For voice/call transcripts
 
 
 class CompanySize(str, Enum):
@@ -32,6 +37,11 @@ class DealOutcome(str, Enum):
     WON = "won"
     LOST = "lost"
     PENDING = "pending"
+
+
+# =============================================================================
+# Document Schemas
+# =============================================================================
 
 
 class DocumentMetadata(BaseModel):
@@ -86,6 +96,11 @@ class Chunk(BaseModel):
         return data
 
 
+# =============================================================================
+# Search Schemas
+# =============================================================================
+
+
 class SearchResult(BaseModel):
     """A single search result from the vector store."""
 
@@ -123,3 +138,42 @@ class SearchResponse(BaseModel):
     results: list[SearchResult]
     total_searched: int = Field(..., description="Total documents in index")
     query: str
+
+
+# =============================================================================
+# Retrieval Schemas
+# =============================================================================
+
+
+class RetrievalResult(BaseModel):
+    """A single retrieval result with source tracking."""
+
+    content: str = Field(..., description="Retrieved text content")
+    score: float = Field(..., description="Similarity score (0-1)")
+    doc_id: str = Field(..., description="Source document ID")
+    doc_type: str = Field(..., description="Type of document")
+    source_file: str = Field(..., description="Original file path")
+    chunk_index: int = Field(default=0, description="Chunk index in document")
+
+    @classmethod
+    def from_search_result(cls, result: SearchResult) -> "RetrievalResult":
+        """Create from a SearchResult."""
+        return cls(
+            content=result.content,
+            score=result.score,
+            doc_id=result.doc_id,
+            doc_type=result.doc_type,
+            source_file=result.source_file,
+            chunk_index=result.metadata.get("chunk_index", 0),
+        )
+
+
+class RetrievalObservation(BaseModel):
+    """Structured observation from retrieval."""
+
+    query: str = Field(..., description="Original query")
+    rewritten_query: str = Field(..., description="Optimized search query")
+    results: list[RetrievalResult] = Field(default_factory=list)
+    total_results: int = Field(default=0)
+    total_tokens: int = Field(default=0, description="Tokens in retrieved content")
+    filters_applied: dict | None = Field(default=None)

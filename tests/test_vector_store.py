@@ -4,8 +4,14 @@ from pathlib import Path
 
 import pytest
 
-from app.ingestion import DocumentChunker, DocumentLoader, IngestionPipeline
-from app.schemas.document import Chunk, DocType, Document, DocumentMetadata, SearchQuery
+from app.documents.ingestion import DocumentChunker, DocumentLoader, IngestionPipeline
+from app.documents.schemas import (
+    Chunk,
+    DocType,
+    Document,
+    DocumentMetadata,
+    SearchQuery,
+)
 
 # Path to test knowledge base
 KNOWLEDGE_BASE_PATH = Path(__file__).parent.parent / "knowledge_base"

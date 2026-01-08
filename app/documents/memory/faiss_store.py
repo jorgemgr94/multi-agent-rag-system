@@ -8,10 +8,9 @@ import faiss
 import numpy as np
 from langchain_openai import OpenAIEmbeddings
 
-from app.config import settings
-from app.logging_config import get_logger
-from app.memory.base import VectorStoreRepository
-from app.schemas.document import Chunk, SearchQuery, SearchResponse, SearchResult
+from app.core import get_logger, settings
+from app.documents.memory.base import VectorStoreRepository
+from app.documents.schemas import Chunk, SearchQuery, SearchResponse, SearchResult
 
 logger = get_logger(__name__)
 

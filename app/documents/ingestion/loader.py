@@ -4,8 +4,8 @@ import re
 from pathlib import Path
 from typing import Any
 
-from app.logging_config import get_logger
-from app.schemas.document import (
+from app.core import get_logger
+from app.documents.schemas import (
     CompanySize,
     DealOutcome,
     DocType,
@@ -87,6 +87,7 @@ class DocumentLoader:
             "products": DocType.PRODUCT,
             "case_studies": DocType.CASE_STUDY,
             "industries": DocType.INDUSTRY,
+            "recordings": DocType.RECORDING,
         }
         return mapping.get(directory, DocType.PRODUCT)
 

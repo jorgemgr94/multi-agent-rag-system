@@ -2,10 +2,10 @@
 
 from pathlib import Path
 
-from app.ingestion.chunker import DocumentChunker
-from app.ingestion.loader import DocumentLoader
-from app.logging_config import get_logger
-from app.schemas.document import Chunk
+from app.core import get_logger
+from app.documents.ingestion.chunker import DocumentChunker
+from app.documents.ingestion.loader import DocumentLoader
+from app.documents.schemas import Chunk
 
 logger = get_logger(__name__)
 

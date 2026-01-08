@@ -1,22 +1,25 @@
 """Tests for the RetrieverAgent."""
 
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.agents.retriever import (
+from app.core.schemas import DecisionType, TaskInput
+from app.documents.retriever import (
     DEFAULT_TOP_K,
     MAX_CONTEXT_TOKENS,
     MAX_TOP_K,
     MIN_RELEVANCE_SCORE,
     MIN_TOP_K,
-    RetrievalObservation,
-    RetrievalResult,
     RetrieverAgent,
 )
-from app.schemas.document import SearchQuery, SearchResponse, SearchResult
-from app.schemas.task import DecisionType, TaskInput
+from app.documents.schemas import (
+    RetrievalObservation,
+    RetrievalResult,
+    SearchQuery,
+    SearchResponse,
+    SearchResult,
+)
 
 # =============================================================================
 # Fixtures
@@ -71,7 +74,7 @@ def mock_llm_response():
 @pytest.fixture
 def retriever_agent(mock_vector_store, mock_llm_response):
     """Create a RetrieverAgent with mocked dependencies."""
-    with patch("app.agents.retriever.ChatOpenAI") as mock_chat:
+    with patch("app.documents.retriever.ChatOpenAI") as mock_chat:
         mock_chat.return_value.invoke.return_value = mock_llm_response
         agent = RetrieverAgent(vector_store=mock_vector_store)
         agent.llm.invoke = MagicMock(return_value=mock_llm_response)
@@ -119,7 +122,7 @@ class TestRetrieverAgent:
 
     def test_agent_initialization(self, mock_vector_store):
         """Test agent initializes correctly."""
-        with patch("app.agents.retriever.ChatOpenAI"):
+        with patch("app.documents.retriever.ChatOpenAI"):
             agent = RetrieverAgent(vector_store=mock_vector_store)
 
             assert agent.name == "retriever"
@@ -128,7 +131,7 @@ class TestRetrieverAgent:
 
     def test_agent_custom_max_tokens(self, mock_vector_store):
         """Test agent with custom token limit."""
-        with patch("app.agents.retriever.ChatOpenAI"):
+        with patch("app.documents.retriever.ChatOpenAI"):
             agent = RetrieverAgent(
                 vector_store=mock_vector_store,
                 max_context_tokens=2000,

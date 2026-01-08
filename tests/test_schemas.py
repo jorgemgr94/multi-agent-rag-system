@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.schemas.task import DecisionType, TaskInput
+from app.core.schemas import DecisionType, TaskInput
 
 
 def test_task_input_valid():

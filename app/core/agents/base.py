@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-from app.schemas.task import AgentDecision, Observation, TaskInput
+from app.core.schemas import AgentDecision, Observation, TaskInput
 
 
 class BaseAgent(ABC):

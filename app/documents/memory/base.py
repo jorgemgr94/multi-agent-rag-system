@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from app.schemas.document import Chunk, SearchQuery, SearchResponse
+from app.documents.schemas import Chunk, SearchQuery, SearchResponse
 
 
 class VectorStoreRepository(ABC):

@@ -52,7 +52,7 @@ class AgentDecision(BaseModel):
     tool_call: ToolCall | None = Field(default=None)
     message: str | None = Field(default=None)
     delegate_to: str | None = Field(
-        default=None, description="P2: Target agent for delegation"
+        default=None, description="Target agent for delegation"
     )
 
 

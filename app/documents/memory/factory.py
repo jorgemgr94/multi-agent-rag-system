@@ -1,8 +1,8 @@
 """Vector store singleton."""
 
-from app.config import settings
-from app.constants import INDEX_PATH
-from app.memory.base import VectorStoreRepository
+from app.core import settings
+from app.core.constants import INDEX_PATH
+from app.documents.memory.base import VectorStoreRepository
 
 
 def _create_store() -> VectorStoreRepository:
@@ -10,12 +10,12 @@ def _create_store() -> VectorStoreRepository:
     store_type = settings.vector_store_type.lower()
 
     if store_type == "faiss":
-        from app.memory.faiss_store import FAISSVectorStore
+        from app.documents.memory.faiss_store import FAISSVectorStore
 
         return FAISSVectorStore(index_path=INDEX_PATH)
 
     if store_type == "pinecone":
-        from app.memory.pinecone_store import PineconeVectorStore
+        from app.documents.memory.pinecone_store import PineconeVectorStore
 
         return PineconeVectorStore()
 

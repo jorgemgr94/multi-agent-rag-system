@@ -3,18 +3,21 @@
 import tiktoken
 from langchain_openai import ChatOpenAI
 
-from app.agents.base import BaseAgent
-from app.config import settings
-from app.logging_config import get_logger
-from app.memory.base import VectorStoreRepository
-from app.schemas.document import SearchQuery, SearchResult
-from app.schemas.retrieval import RetrievalObservation, RetrievalResult
-from app.schemas.task import (
+from app.core import get_logger, settings
+from app.core.agents import BaseAgent
+from app.core.schemas import (
     AgentDecision,
     DecisionType,
     Observation,
     TaskInput,
     ToolCall,
+)
+from app.documents.memory import VectorStoreRepository
+from app.documents.schemas import (
+    RetrievalObservation,
+    RetrievalResult,
+    SearchQuery,
+    SearchResult,
 )
 
 logger = get_logger(__name__)
