@@ -1,4 +1,4 @@
-.PHONY: dev run install install-dev sync clean test
+.PHONY: dev run dashboard install install-dev sync clean test
 
 # Start development server with hot reload
 dev:
@@ -7,6 +7,10 @@ dev:
 # Start production server
 run:
 	uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+# Start Streamlit dashboard
+dashboard:
+	uv run streamlit run dashboard/app.py --server.port 8501
 
 # Install dependencies
 install:

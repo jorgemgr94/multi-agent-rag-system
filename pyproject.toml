@@ -1,7 +1,7 @@
 [project]
 name = "multi-agent-rag-system"
-version = "0.1.0"
-description = "Multi-agent RAG system with vector databases and semantic memory"
+version = "0.2.0"
+description = "Deal Intelligence Platform - Multi-agent RAG system for sales teams"
 requires-python = ">=3.11"
 
 dependencies = [
@@ -15,6 +15,9 @@ dependencies = [
   "faiss-cpu",
   "tiktoken",
   "pinecone",
+  # Dashboard
+  "streamlit",
+  "requests",
 ]
 
 [project.optional-dependencies]
@@ -37,4 +40,4 @@ select = ["E", "F", "I", "W"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["app"]
+known-first-party = ["app", "dashboard"]
