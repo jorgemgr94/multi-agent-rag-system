@@ -15,6 +15,7 @@ dependencies = [
   "faiss-cpu",
   "tiktoken",
   "pinecone",
+  "numpy",
   # Dashboard
   "streamlit",
   "requests",
