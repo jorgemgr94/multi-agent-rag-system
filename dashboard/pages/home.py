@@ -76,7 +76,7 @@ def render():
         st.markdown(
             """
             ### 📊 Briefings
-            **Status: 🔜 Coming (M4)**
+            **Status: ✅ Active**
             
             - Multi-agent orchestration
             - Company research
@@ -109,9 +109,7 @@ def render():
         if st.button("📥 Ingest Documents", use_container_width=True):
             with st.spinner("Ingesting documents..."):
                 try:
-                    response = requests.post(
-                        f"{API_URL}/documents/ingest", timeout=60
-                    )
+                    response = requests.post(f"{API_URL}/documents/ingest", timeout=60)
                     if response.ok:
                         data = response.json()
                         st.success(

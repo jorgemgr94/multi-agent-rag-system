@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import streamlit as st
 
 from dashboard.config import setup_page
-from dashboard.pages import documents, home
+from dashboard.pages import briefings, documents, home
 
 # Page configuration
 setup_page()
@@ -30,7 +30,7 @@ st.sidebar.markdown(
     <div style="font-size: 0.8em; color: #666;">
     <strong>Status</strong><br>
     ✅ Documents: Active<br>
-    🔜 Briefings: Coming<br>
+    ✅ Briefings: Active<br>
     ⏳ Calls: Planned
     </div>
     """,
@@ -43,18 +43,7 @@ if page == "🏠 Home":
 elif page == "📄 Documents":
     documents.render()
 elif page == "📊 Briefings":
-    st.title("📊 Deal Briefings")
-    st.info("Multi-agent briefing generation coming in M4!")
-    st.markdown(
-        """
-        This feature will include:
-        - 🤖 Orchestrator agent coordination
-        - 🏢 Company research
-        - 📈 Similar deals analysis
-        - ⚔️ Competitive positioning
-        - 💡 Proposal recommendations
-        """
-    )
+    briefings.render()
 elif page == "🎙️ Calls":
     st.title("🎙️ Call Analysis")
     st.info("Voice analysis coming in M5-M8!")

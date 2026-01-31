@@ -1,8 +1,9 @@
 """Briefing-related schemas."""
 
+import re
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class BriefingRequest(BaseModel):
@@ -27,9 +28,24 @@ class SimilarDeal(BaseModel):
     company: str
     similarity_score: float
     outcome: str
-    deal_value: int | None = None
+    deal_value: int | str | None = None
     key_learnings: str
     source: str
+
+    @field_validator("deal_value", mode="before")
+    @classmethod
+    def parse_deal_value(cls, v: Any) -> int | None:
+        """Parse deal value from various formats."""
+        if v is None:
+            return None
+        if isinstance(v, int):
+            return v
+        if isinstance(v, str):
+            # Remove currency symbols and parse
+            cleaned = re.sub(r"[^\d]", "", v)
+            if cleaned:
+                return int(cleaned)
+        return None
 
 
 class CompetitivePositioning(BaseModel):

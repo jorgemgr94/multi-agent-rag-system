@@ -5,7 +5,7 @@ Handles document ingestion, storage, retrieval, and search.
 
 from app.documents.ingestion import DocumentChunker, DocumentLoader, IngestionPipeline
 from app.documents.memory import vector_store
-from app.documents.retriever import RetrieverAgent
+from app.documents.agents import RetrieverAgent
 from app.documents.schemas import (
     Chunk,
     CompanySize,

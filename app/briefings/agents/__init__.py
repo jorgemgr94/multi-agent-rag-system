@@ -1,6 +1,6 @@
 """Briefing agents module.
 
-Will contain:
+Contains:
 - OrchestratorAgent: Coordinates workflow, synthesizes final briefing
 - CompanyResearcherAgent: Finds industry insights, market context
 - SimilarDealsFinderAgent: Identifies past deals with similar characteristics
@@ -8,4 +8,25 @@ Will contain:
 - ProposalDrafterAgent: Generates customized talking points
 """
 
-__all__ = []
+from app.briefings.agents.base import SpecialistAgent, SpecialistResult
+from app.briefings.agents.orchestrator import OrchestrationState, OrchestratorAgent
+from app.briefings.agents.specialists import (
+    CompanyResearcherAgent,
+    CompetitorAnalystAgent,
+    ProposalDrafterAgent,
+    SimilarDealsFinderAgent,
+)
+
+__all__ = [
+    # Orchestrator
+    "OrchestratorAgent",
+    "OrchestrationState",
+    # Base
+    "SpecialistAgent",
+    "SpecialistResult",
+    # Specialists
+    "CompanyResearcherAgent",
+    "SimilarDealsFinderAgent",
+    "CompetitorAnalystAgent",
+    "ProposalDrafterAgent",
+]

@@ -29,7 +29,9 @@ logger = get_logger(__name__)
 
 # Context window limits (in tokens)
 MAX_CONTEXT_TOKENS = 4000  # Leave room for system prompt + response
-MIN_RELEVANCE_SCORE = 0.5  # Minimum similarity score to include
+# Note: text-embedding-3-small returns lower scores than older models
+# Scores of 0.2-0.4 are typically relevant, 0.4+ is highly relevant
+MIN_RELEVANCE_SCORE = 0.15  # Minimum similarity score to include
 
 # Top-k configuration
 DEFAULT_TOP_K = 5
@@ -43,28 +45,28 @@ MIN_TOP_K = 1
 
 QUERY_REWRITE_SYSTEM = """You are a search query optimizer for a sales knowledge base.
 
-Your job is to rewrite queries to maximize retrieval quality from a vector database.
+                        Your job is to rewrite queries to maximize retrieval quality from a vector database.
 
-The knowledge base contains:
-- Past deal records (company, industry, outcome, learnings)
-- Competitor analyses
-- Product documentation and pricing
-- Industry playbooks
-- Case studies and proposals
+                        The knowledge base contains:
+                        - Past deal records (company, industry, outcome, learnings)
+                        - Competitor analyses
+                        - Product documentation and pricing
+                        - Industry playbooks
+                        - Case studies and proposals
 
-Rules:
-1. Expand abbreviations and jargon
-2. Add relevant synonyms
-3. Make implicit context explicit
-4. Keep the rewritten query concise (1-2 sentences max)
-5. Focus on searchable concepts, not questions
+                        Rules:
+                        1. Expand abbreviations and jargon
+                        2. Add relevant synonyms
+                        3. Make implicit context explicit
+                        4. Keep the rewritten query concise (1-2 sentences max)
+                        5. Focus on searchable concepts, not questions
 
-Output ONLY the rewritten query, nothing else."""
+                        Output ONLY the rewritten query, nothing else."""
 
 QUERY_REWRITE_USER = """Original query: {query}
-Context: {context}
+                    Context: {context}
 
-Rewritten query:"""
+                    Rewritten query:"""
 
 
 class RetrieverAgent(BaseAgent):
@@ -333,11 +335,11 @@ class RetrieverAgent(BaseAgent):
         sections = []
         for i, result in enumerate(retrieval.results, 1):
             section = f"""[Source {i}: {result.source_file}]
-Type: {result.doc_type}
-Relevance: {result.score:.2f}
----
-{result.content}
----"""
+                        Type: {result.doc_type}
+                        Relevance: {result.score:.2f}
+                        ---
+                        {result.content}
+                        ---"""
             sections.append(section)
 
         header = f"Retrieved {len(retrieval.results)} relevant documents:\n"

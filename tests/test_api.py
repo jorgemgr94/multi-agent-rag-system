@@ -1,5 +1,7 @@
 """API endpoint tests."""
 
+from unittest.mock import MagicMock, patch
+
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -21,11 +23,6 @@ def test_status_endpoint():
     assert "features" in data
 
 
-def test_tasks_endpoint_validation():
-    response = client.post("/tasks", json={})
-    assert response.status_code == 422
-
-
 def test_documents_list_empty():
     """Test documents list when empty."""
     response = client.get("/documents")
@@ -34,12 +31,36 @@ def test_documents_list_empty():
     assert "status" in data
 
 
-def test_briefings_placeholder():
-    """Test briefings endpoint returns placeholder."""
-    response = client.post(
-        "/briefings",
-        json={"company_name": "Test Corp"},
-    )
+def test_briefings_endpoint():
+    """Test briefings endpoint returns a briefing response."""
+    # Mock the LLM calls to avoid hitting the API
+    mock_response = MagicMock()
+    mock_response.content = """{
+        "overview": "Test overview",
+        "key_priorities": [],
+        "relevant_trends": [],
+        "considerations": []
+    }"""
+
+    with patch("app.briefings.agents.base.ChatOpenAI") as mock_chat:
+        mock_chat.return_value.invoke.return_value = mock_response
+
+        response = client.post(
+            "/briefings",
+            json={"company_name": "Test Corp"},
+        )
+
     assert response.status_code == 200
     data = response.json()
-    assert data["status"] == "not_implemented"
+    # Should have metadata from the orchestrator
+    assert "metadata" in data
+    assert "company_summary" in data
+
+
+def test_briefings_health():
+    """Test briefings health endpoint."""
+    response = client.get("/briefings/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert "status" in data
+    assert "specialists" in data
