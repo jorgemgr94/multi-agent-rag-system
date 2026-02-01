@@ -1,6 +1,11 @@
 """Dashboard configuration and styling."""
 
+import os
+
 import streamlit as st
+
+# API base URL - uses BACKEND_URL env var for Docker, falls back to localhost for local dev
+API_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 # Custom CSS
 CUSTOM_CSS = """
@@ -124,7 +129,3 @@ def setup_page():
 
     # Apply custom CSS
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
-
-# API base URL
-API_URL = "http://localhost:8000"

@@ -1,0 +1,30 @@
+FROM python:3.11-slim-bookworm
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Set working directory
+WORKDIR /app
+
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
+
+# Copy project files
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies
+RUN uv sync --frozen --no-dev
+
+# Copy application code
+COPY app ./app
+COPY dashboard ./dashboard
+COPY knowledge_base ./knowledge_base
+
+# Add app to python path
+ENV PYTHONPATH=/app
+
+# Expose port
+EXPOSE 8501
+
+# Start command
+CMD ["uv", "run", "streamlit", "run", "dashboard/app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]

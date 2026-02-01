@@ -3,8 +3,7 @@
 import requests
 import streamlit as st
 
-# API base URL
-API_URL = "http://localhost:8000"
+from dashboard.config import API_URL
 
 
 def render():
