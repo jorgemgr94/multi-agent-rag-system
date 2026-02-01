@@ -1,153 +1,56 @@
-# Deal Intelligence Platform
+# Deal Intelligence Platform (The Brain)
 
-A **production-oriented multi-agent AI system** for knowledge-driven automation, decision support, and consulting-grade workflows.
+**Role:** The Cognitive Engine
+**Focus:** Understanding, Reasoning, Strategy
 
 ## Overview
 
-This platform provides sales teams with AI-powered deal preparation, combining:
+This repository houses the **Cognitive Engine** of the ecosystem. Its primary purpose is to **understand** complex unstructured data (documents, sales calls, market briefings) and synthesize it into high-level strategic intelligence.
 
-- 🤖 **Multi-agent orchestration** — Specialist agents with clear responsibilities
-- 🔍 **Retrieval-Augmented Generation (RAG)** — Context-aware responses from knowledge bases
-- 🧠 **Vector databases** — FAISS (local) / Pinecone (managed) with semantic search
-- 🎙️ **Voice analysis** — Meeting transcription and sentiment analysis
-- 📊 **Interactive dashboards** — Streamlit-based analytics
+Unlike a simple chatbot, this system is designed to "deep think": it retrieves specific knowledge (`RAG`), orchestrates multiple specialist agents to debate and analyze (`Multi-Agent`), and produces structured insights.
+
+> **Note:** This system does not *execute* changes in external systems (like sending emails or creating orders). That responsible execution is delegated to the **Autonomous Task Agent (The Body)**.
+
+## Core Capabilities
+
+1.  **Orchestration**: A central `OrchestratorAgent` that breaks down high-level questions ("How do we close this deal?") into research tasks.
+2.  **Specialist Experts**:
+    *   `CompanyResearcher`: Analyzes market position.
+    *   `CompetitorAnalyst`: Finds gaps in rival offerings.
+    *   `SimilarDealsFinder`: Recalls institutional memory.
+3.  **Advanced RAG**:
+    *   **Vector Search**: For finding relevant text chunks.
+    *   **GraphRAG** (Roadmap): For understanding relationships between people and companies.
+4.  **Multi-Modal Perception** (Roadmap):
+    *   Ingesting Audio (Sales Calls) to understand sentiment.
+    *   Ingesting Visuals (Slide Decks) to understand context.
 
 ## Architecture
 
 ```mermaid
 flowchart TB
-    subgraph Platform["DEAL INTELLIGENCE PLATFORM"]
-        subgraph Docs["📄 DOCUMENTS ✅ Complete"]
-            D1[Ingestion]
-            D2[Chunking]
-            D3[Retrieval]
-            D4[Search]
-        end
+    subgraph Brain["🧠 THE BRAIN (This Repo)"]
+        direction TB
+        Input[Data Sources] --> Process[Cognitive Processing]
+        Process --> Output[Strategic Intelligence]
         
-        subgraph Brief["📋 BRIEFINGS 🔜 Next"]
-            B1[Orchestrator]
-            B2[Specialists]
-            B3[Synthesis]
-        end
-        
-        subgraph Calls["🎙️ CALLS ⏳ Planned"]
-            C1[Transcription]
-            C2[Sentiment]
-            C3[NER]
-            C4[Topics]
-        end
-        
-        subgraph Core["⚙️ CORE"]
-            CONF[Config]
-            LOG[Logging]
-            BASE[Base Agent]
-            SCH[Schemas]
+        subgraph Process
+            RAG[Retrieval Engine]
+            Agents[Specialist Agents]
+            Graph[Knowledge Graph]
         end
     end
-    
-    Docs --> Core
-    Brief --> Core
-    Calls --> Core
-    
-    style Docs fill:#c8e6c9,stroke:#2e7d32,color:#1b5e20
-    style Brief fill:#fff3e0,stroke:#ef6c00,color:#e65100
-    style Calls fill:#e3f2fd,stroke:#1976d2,color:#0d47a1
-    style Core fill:#f3e5f5,stroke:#7b1fa2,color:#4a148c
+
+    subgraph Body["💪 THE BODY (External Repo)"]
+        TaskAgent[Autonomous Task Agent]
+    end
+
+    Output -->|Briefing/Plan| TaskAgent
+    TaskAgent -->|Tool Results| Input
 ```
 
-### Agent Architecture
+## documentation
 
-```mermaid
-flowchart TB
-    subgraph Input
-        USER[Sales Rep]
-        QUERY[Deal Context]
-    end
-
-    subgraph Orchestration
-        ORCH[Orchestrator Agent]
-    end
-
-    subgraph Specialists[Specialist Agents]
-        RESEARCH[Company Researcher]
-        SIMILAR[Similar Deals Finder]
-        COMPETE[Competitor Analyst]
-        PROPOSE[Proposal Drafter]
-    end
-
-    subgraph Knowledge[Vector Database]
-        DOCS[(Indexed Documents)]
-    end
-
-    subgraph Output
-        BRIEF[Deal Briefing]
-    end
-
-    USER --> QUERY
-    QUERY --> ORCH
-    ORCH --> RESEARCH
-    ORCH --> SIMILAR
-    ORCH --> COMPETE
-    ORCH --> PROPOSE
-    
-    RESEARCH <--> DOCS
-    SIMILAR <--> DOCS
-    COMPETE <--> DOCS
-    PROPOSE <--> DOCS
-    
-    RESEARCH --> ORCH
-    SIMILAR --> ORCH
-    COMPETE --> ORCH
-    PROPOSE --> ORCH
-    
-    ORCH --> BRIEF
-    BRIEF --> USER
-
-    style DOCS fill:#f9f,stroke:#333
-    style ORCH fill:#90EE90,stroke:#2d5a2d,color:#1a1a1a
-    style Specialists fill:#e8f5e9,stroke:#4a7c59
-```
-
-## Quick Start
-
-### Prerequisites
-
-- Python 3.11+
-- [uv](https://github.com/astral-sh/uv) package manager
-- OpenAI API key
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/multi-agent-rag-system.git
-cd multi-agent-rag-system
-
-# Install dependencies
-make install-dev
-
-# Configure environment
-cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
-
-# Run tests
-make test
-
-# Start development server
-make dev
-
-# Start dashboard (in a separate terminal)
-make dashboard
-```
-
-## Design Philosophy
-
-- **Feature-based organization** — Each module is self-contained
-- **Agents have explicit and limited responsibilities**
-- **Retrieval is intentional**, not automatic
-- **Memory is selective and scoped**, not infinite
-- **Pipeline steps are observable and debuggable**
-
-## Related Documentation
-
-- [INGESTION_PIPELINE.md](INGESTION_PIPELINE.md) — Document processing details
+- **[ROADMAP.md](ROADMAP.md)**: The project roadmap.
+- **[USE_CASE.md](USE_CASE.md)**: The specific business value (Deal Intelligence).
+- **[INGESTION_PIPELINE.md](INGESTION_PIPELINE.md)**: How data feeds the brain.
